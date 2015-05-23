@@ -1,5 +1,13 @@
 #!/bin/bash
 
+set +e
+haveDocker=$(docker version | grep "version")
+set -e
+
+if [ "$haveDocker" ]; then
+  exit 0;
+fi
+
 # Remove the lock
 set +e
 sudo rm /var/lib/dpkg/lock > /dev/null
@@ -11,10 +19,4 @@ set -e
 sudo apt-get update
 
 # Install docker
-set +e
-haveDocker=$(docker version | grep "version")
-set -e
-
-if [ ! "$haveDocker" ]; then
-  wget -qO- https://get.docker.com/ | sudo sh
-fi
+wget -qO- https://get.docker.com/ | sudo sh
